@@ -1,1 +1,7 @@
 require 'yt/config'
+require 'yt/errors/forbidden'
+require 'yt/errors/missing_auth'
+require 'yt/errors/no_items'
+require 'yt/errors/request_error'
+require 'yt/errors/server_error'
+require 'yt/errors/unauthorized'
