@@ -12,8 +12,9 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{Support utilities for Yt gems}
   spec.description   = %q{Yt::Support provides common functionality to Yt,
     Yt::Auth. It is considered suitable for internal use only at this time.}
-  spec.homepage    = 'https://github.com/fullscreen/yt-support'
+  spec.homepage      = 'https://github.com/fullscreen/yt-support'
   spec.license       = 'MIT'
+
   spec.required_ruby_version = '>= 2.2.2'
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
