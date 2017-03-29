@@ -17,6 +17,8 @@ Yt::Support provides:
 
 * [Yt.configure](http://www.rubydoc.info/gems/yt-support/Yt/Config#configure-instance_method)
 * [Yt::Configuration](http://www.rubydoc.info/gems/yt-support/Yt/Configuration)
+* [Yt::HTTPRequest](http://www.rubydoc.info/gems/yt-support/Yt/HTTPRequest)
+* [Yt::HTTPError](http://www.rubydoc.info/gems/yt-support/Yt/HTTPError)
 
 How to contribute
 =================
