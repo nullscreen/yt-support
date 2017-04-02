@@ -19,6 +19,7 @@ Yt::Support provides:
 * [Yt::Configuration](http://www.rubydoc.info/gems/yt-support/Yt/Configuration)
 * [Yt::HTTPRequest](http://www.rubydoc.info/gems/yt-support/Yt/HTTPRequest)
 * [Yt::HTTPError](http://www.rubydoc.info/gems/yt-support/Yt/HTTPError)
+* [Yt::ConnectionError](http://www.rubydoc.info/gems/yt-support/Yt/ConnectionError)
 
 How to contribute
 =================

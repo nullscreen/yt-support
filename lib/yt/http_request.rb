@@ -1,5 +1,6 @@
 require 'net/http'
 require 'json'
+require 'yt/connection_error'
 require 'yt/http_error'
 
 module Yt
@@ -111,6 +112,17 @@ module Yt
       @response ||= Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
         http.request http_request
       end
+    rescue *server_errors => e
+      raise Yt::ConnectionError, e.message
+    end
+
+    # Returns the list of server errors worth retrying the request once.
+    def server_errors
+      [
+        Errno::ECONNRESET, Errno::EHOSTUNREACH, Errno::ENETUNREACH,
+        Errno::ETIMEDOUT, Net::HTTPServerError, Net::OpenTimeout,
+        OpenSSL::SSL::SSLError, OpenSSL::SSL::SSLErrorWaitReadable, SocketError,
+      ]
     end
 
     # Replaces the body of the response with the parsed version of the body,

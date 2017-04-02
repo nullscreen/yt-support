@@ -23,4 +23,13 @@ describe 'Yt::HTTPRequest#run' do
       expect{request.run}.to raise_error Yt::HTTPError, 'Error: Not Found'
     end
   end
+
+  context 'given a request that causes a connection/server error' do
+    host = 'g00gl3ap1s.com'
+    request = Yt::HTTPRequest.new host: host
+
+    it 'raises an HTTPError' do
+      expect{request.run}.to raise_error Yt::ConnectionError
+    end
+  end
 end

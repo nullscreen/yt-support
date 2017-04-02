@@ -6,6 +6,10 @@ For more information about changelogs, check
 [Keep a Changelog](http://keepachangelog.com) and
 [Vandamme](http://tech-angels.github.io/vandamme).
 
+## 0.1.2 - 2017-04-02
+
+* [FEATURE] Add Yt::ConnectionError to deal with connection/server errors
+
 ## 0.1.1 - 2017-03-29
 
 * [FEATURE] Extracted Yt::HTTPRequest and Yt::HTTPError from Yt::Auth
