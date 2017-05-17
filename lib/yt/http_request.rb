@@ -54,6 +54,18 @@ module Yt
       end
     end
 
+    # Returns the +cURL+ version of the request, useful to re-run the request
+    # in a shell terminal.
+    # @return [String] the +cURL+ version of the request.
+    def as_curl
+      'curl'.tap do |curl|
+        curl << " -X #{http_request.method}"
+        http_request.each_header{|k, v| curl << %Q{ -H "#{k}: #{v}"}}
+        curl << %Q{ -d '#{http_request.body}'} if http_request.body
+        curl << %Q{ "#{uri.to_s}"}
+      end
+    end
+
   private
 
     # @return [URI::HTTPS] the (memoized) URI of the request.
