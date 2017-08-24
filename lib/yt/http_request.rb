@@ -50,7 +50,7 @@ module Yt
           parse_response!
         end
       else
-        raise Yt::HTTPError, error_message
+        raise Yt::HTTPError.new(error_message, response: response)
       end
     end
 
