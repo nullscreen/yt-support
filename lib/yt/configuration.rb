@@ -44,6 +44,12 @@ module Yt
     # @return [String] the level of output to print for debugging purposes.
     attr_accessor :log_level
 
+    # @return [String] the access token to act on behalf of a YouTube account.
+    attr_accessor :access_token
+
+    # @return [String] the token to refresh an expired access token.
+    attr_accessor :refresh_token
+
     # Initialize the global configuration settings, using the values of
     # the specified following environment variables by default.
     def initialize
