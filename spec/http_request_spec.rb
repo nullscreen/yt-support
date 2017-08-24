@@ -14,13 +14,25 @@ describe 'Yt::HTTPRequest#run' do
     end
   end
 
-  context 'given a invalid GET request to a YouTube JSON API' do
+  context 'given a invalid request to a YouTube JSON API' do
     path = '/discovery/v1/apis/youtube/v3/unknown-endpoint'
     body = {token: :unknown}
     request = Yt::HTTPRequest.new path: path, method: :post, body: body
 
     it 'raises an HTTPError' do
       expect{request.run}.to raise_error Yt::HTTPError, 'Error: Not Found'
+    end
+  end
+
+  context 'given a POST request with x-www-form-urlencoded body' do
+    host = 'accounts.google.com'
+    path = '/o/oauth2/token'
+    body = {client_id: :unknown}
+    options = {host: host, path: path, body: body, request_format: :form}
+    request = Yt::HTTPRequest.new options
+
+    it 'raises an HTTPError' do
+      expect{request.run}.to raise_error Yt::HTTPError
     end
   end
 

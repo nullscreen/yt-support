@@ -89,9 +89,12 @@ module Yt
     # if the request body is a JSON Object, transform its keys into camel-case,
     # since this is the common format for JSON APIs.
     def set_request_body!(request)
-      if @body
-        request.set_form_data @body
-      end
+      case @request_format
+        when :json
+          request.body = @body.to_json
+        when :form
+          request.set_form_data @body
+      end if @body
     end
 
     # Adds the request headers to the request in the appropriate format.
