@@ -14,6 +14,28 @@ describe 'Yt::HTTPRequest#run' do
     end
   end
 
+  context 'when developing' do
+    path = '/discovery/v1/apis/youtube/v3/rest'
+    headers = {'User-Agent' => 'Yt::HTTPRequest'}
+    params = {verbose: 1}
+    request = Yt::HTTPRequest.new path: path, headers: headers, params: params
+
+    before { Yt.configuration.log_level = :devel }
+    after  { Yt.configuration.log_level = :debug }
+
+    it 'outputs the request in curl format' do
+      p "LEVEL #{Yt.configuration.log_level}"
+      expect(STDOUT).to receive(:puts).with <<-MSG.tr("\n", " ").strip
+curl
+-X GET
+-H "content-type: application/json"
+-H "user-agent: Yt::HTTPRequest"
+"https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest?verbose=1"
+      MSG
+      request.run
+    end
+  end
+
   context 'given a invalid request to a YouTube JSON API' do
     path = '/discovery/v1/apis/youtube/v3/unknown-endpoint'
     body = {token: :unknown}

@@ -85,6 +85,15 @@ module Yt
       end
     end
 
+    def as_curl
+      'curl'.tap do |curl|
+        curl <<  " -X #{http_request.method}"
+        http_request.each_header{|k, v| curl << %Q{ -H "#{k}: #{v}"}}
+        curl << %Q{ -d '#{http_request.body}'} if http_request.body
+        curl << %Q{ "#{uri.to_s}"}
+      end
+    end
+
     # Adds the request body to the request in the appropriate format.
     # if the request body is a JSON Object, transform its keys into camel-case,
     # since this is the common format for JSON APIs.
@@ -113,6 +122,7 @@ module Yt
     # Run the request and memoize the response or the server error received.
     def response
       @response ||= Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
+        puts as_curl if Yt.configuration.developing?
         http.request http_request
       end
     rescue *server_errors => e
