@@ -67,3 +67,17 @@ curl
     end
   end
 end
+
+describe 'Yt::HTTPRequest#as_curl' do
+  context 'given a request to a YouTube JSON API' do
+    path = '/discovery/v1/apis/youtube/v3/rest'
+    headers = {'User-Agent' => 'Yt::HTTPRequest'}
+    params = {verbose: 1}
+    request = Yt::HTTPRequest.new path: path, headers: headers, params: params
+    request_as_curl = 'curl -X GET -H "content-type: application/json" -H "user-agent: Yt::HTTPRequest" "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest?verbose=1"'
+
+    it 'returns a curl version of the request' do
+      expect(request.as_curl).to eq request_as_curl
+    end
+  end
+end
