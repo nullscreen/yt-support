@@ -52,9 +52,23 @@ module Yt
       else
         raise Yt::HTTPError.new(error_message, response: response)
       end
+    rescue Net::HTTPServerError
+      retry_run
     end
 
   private
+
+    # retry the run method in case of a random 500 error from YouTube API
+    def retry_run
+      if @retried
+        raise Yt::ConnectionError, error_message
+      else
+        @retried = true
+        @response = nil
+        sleep 5
+        run
+      end
+    end
 
     # @return [URI::HTTPS] the (memoized) URI of the request.
     def uri
