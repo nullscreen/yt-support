@@ -121,9 +121,12 @@ module Yt
 
     # Run the request and memoize the response or the server error received.
     def response
-      @response ||= Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
-        puts as_curl if Yt.configuration.developing?
-        http.request http_request
+      instrument do |data|
+        @response ||= Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
+          puts as_curl if Yt.configuration.developing?
+          http.request http_request
+        end
+        data[:response] = @response
       end
     rescue *server_errors => e
       raise Yt::ConnectionError, e.message
@@ -148,6 +151,19 @@ module Yt
 
     def error_message
       @error_message.call response.body
+    end
+
+    def instrument(&block)
+      data = {
+        request: http_request,
+        method: http_request.method,
+        request_uri: uri
+      }
+      if defined?(ActiveSupport::Notifications)
+        ActiveSupport::Notifications.instrument 'request.yt', data, &block
+      else
+        yield data
+      end
     end
   end
 end
