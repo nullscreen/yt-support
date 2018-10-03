@@ -162,7 +162,7 @@ module Yt
       if defined?(ActiveSupport::Notifications)
         ActiveSupport::Notifications.instrument 'request.yt', data, &block
       else
-        yield data
+        block.call(data)
       end
     end
   end

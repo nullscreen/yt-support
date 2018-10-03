@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe 'Yt::HTTPRequest#run' do
   context 'given a valid GET request to a YouTube JSON API' do
-    path = '/discovery/v1/apis/youtube/v3/rest'
-    headers = {'User-Agent' => 'Yt::HTTPRequest'}
-    params = {verbose: 1}
-    request = Yt::HTTPRequest.new path: path, headers: headers, params: params
+    let(:path) { '/discovery/v1/apis/youtube/v3/rest' }
+    let(:headers) { {'User-Agent' => 'Yt::HTTPRequest'} }
+    let(:params) { {verbose: 1} }
+    let(:request) { Yt::HTTPRequest.new path: path, headers: headers, params: params }
 
     it 'returns the HTTP response with the JSON-parsed body' do
       response = request.run
