@@ -2,15 +2,36 @@ require 'spec_helper'
 
 describe 'Yt::HTTPRequest#run' do
   context 'given a valid GET request to a YouTube JSON API' do
-    path = '/discovery/v1/apis/youtube/v3/rest'
-    headers = {'User-Agent' => 'Yt::HTTPRequest'}
-    params = {verbose: 1}
-    request = Yt::HTTPRequest.new path: path, headers: headers, params: params
+    let(:path) { '/discovery/v1/apis/youtube/v3/rest' }
+    let(:headers) { {'User-Agent' => 'Yt::HTTPRequest'} }
+    let(:params) { {verbose: 1} }
+    let(:request) { Yt::HTTPRequest.new path: path, headers: headers, params: params }
 
     it 'returns the HTTP response with the JSON-parsed body' do
       response = request.run
       expect(response).to be_a Net::HTTPOK
       expect(response.body).to be_a Hash
+    end
+
+    it 'instruments when ActiveSupport::Notifications are around' do
+      fake_notifier_klass = Class.new do
+        attr_reader :label, :data
+        def instrument(label, data)
+          @label = label
+          @data = data
+          yield data
+        end
+      end
+      fake_notifier = fake_notifier_klass.new
+      stub_const("ActiveSupport::Notifications", fake_notifier)
+
+      response = request.run
+
+      expect(fake_notifier.label).to eql('request.yt')
+      expect(fake_notifier.data[:method]).to eql('GET')
+      expect(fake_notifier.data[:request].path).to eql('/discovery/v1/apis/youtube/v3/rest?verbose=1')
+      expect(fake_notifier.data[:request_uri].to_s).to eql('https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest?verbose=1')
+      expect(fake_notifier.data[:response].code).to eql("200")
     end
   end
 
